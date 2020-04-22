@@ -9,6 +9,19 @@
         "phpunit/phpunit": "^9.1",
         "composer/composer": "^1.7 || ^2.0"
     },
+    "extra": {
+        "class": "PHPWatch\\ComposerAutoloadMin\\Plugin"
+    },
+    "autoload": {
+        "psr-4": {
+            "PHPWatch\\ComposerAutoloadMin\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PHPWatch\\ComposerAutoloadMin\\Tests": "tests/"
+        }
+    },
     "license": "MIT",
     "authors": [
         {
