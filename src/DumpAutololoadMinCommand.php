@@ -13,6 +13,7 @@ class DumpAutololoadMinCommand extends DumpAutoloadCommand {
         parent::configure();
         $this->setName('dump-min-autoload');
         $this->setAliases(['dmo']);
+        $this->setAliases(['dump-mini-autoload']);
         $this->setDescription('Dumps a minimal version of the autoloader');
         $this
             ->setDefinition(array(
