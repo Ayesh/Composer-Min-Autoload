@@ -1,8 +1,6 @@
 <?php
 
-
-namespace PHPWatch\ComposerAutoloadMin;
-
+namespace Ayesh\ComposerAutoloadMin;
 
 use Composer\Autoload\AutoloadGenerator;
 use Composer\Autoload\ClassMapGenerator;

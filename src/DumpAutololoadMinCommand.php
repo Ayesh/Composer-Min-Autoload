@@ -1,8 +1,6 @@
 <?php
 
-
-namespace PHPWatch\ComposerAutoloadMin;
-
+namespace Ayesh\ComposerAutoloadMin;
 
 use Composer\Command\DumpAutoloadCommand;
 use Symfony\Component\Console\Input\InputInterface;

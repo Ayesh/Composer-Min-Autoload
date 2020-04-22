@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPWatch\ComposerAutoloadMin;
+namespace Ayesh\ComposerAutoloadMin;
 
 use Composer\Composer;
 use Composer\IO\IOInterface;

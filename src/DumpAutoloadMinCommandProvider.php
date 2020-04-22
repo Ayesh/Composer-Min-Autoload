@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPWatch\ComposerAutoloadMin;
+namespace Ayesh\ComposerAutoloadMin;
 
 use Composer\Command\BaseCommand;
 use Composer\Plugin\Capability\CommandProvider;
