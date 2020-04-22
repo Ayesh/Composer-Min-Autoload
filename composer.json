@@ -1,5 +1,5 @@
 {
-    "name": "ayesh/composer-mini-autoload",
+    "name": "ayesh/composer-min-autoload",
     "description": "A Composer plugin to generate slightly minimal Autoloaders with a new `dump-min-autoload` command",
     "type": "composer-plugin",
     "require": {
@@ -20,7 +20,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Ayesh\\ComposerAutoloadMin\\Tests": "tests/"
+            "Ayesh\\ComposerAutoloadMin\\Tests\\": "tests/"
         }
     },
     "license": "MIT",
