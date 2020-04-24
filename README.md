@@ -1,3 +1,9 @@
+<div align="center">
+	<img src="https://ayesh.me/files/static/composer-min-autoload/banner.png">
+	<br>
+</div>
+
+
 # Composer Min Autoload
 A Composer plugin to generate slightly minimal Autoloader with a new `dump-min-autoload` command
 
