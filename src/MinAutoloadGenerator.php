@@ -242,6 +242,7 @@ EOF;
       $this->safeUnlink($targetDir.'/autoload_classmap.php');
       $this->safeUnlink($targetDir.'/autoload_real.php');
       $this->safeUnlink($targetDir.'/autoload_files.php');
+      $this->safeUnlink($targetDir.'/platform_check.php');
 
       $initial_autoload = $this->getAutoloadFile($vendorPathToTargetDirCode, $suffix);
       $autoload_real_contents = $this->getAutoloadRealFile(true, (bool) $includePathFileContents, $targetDirLoader, (bool) $includeFilesFileContents, $vendorPathCode, $appBaseDirCode, $suffix, $useGlobalIncludePath, $prependAutoloader, $staticPhpVersion, false);
