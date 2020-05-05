@@ -244,7 +244,7 @@ EOF;
       $this->safeUnlink($targetDir.'/autoload_files.php');
 
       $initial_autoload = $this->getAutoloadFile($vendorPathToTargetDirCode, $suffix);
-      $autoload_real_contents = $this->getAutoloadRealFile(true, (bool) $includePathFileContents, $targetDirLoader, (bool) $includeFilesFileContents, $vendorPathCode, $appBaseDirCode, $suffix, $useGlobalIncludePath, $prependAutoloader, $staticPhpVersion);
+      $autoload_real_contents = $this->getAutoloadRealFile(true, (bool) $includePathFileContents, $targetDirLoader, (bool) $includeFilesFileContents, $vendorPathCode, $appBaseDirCode, $suffix, $useGlobalIncludePath, $prependAutoloader, $staticPhpVersion, (bool) $config->get('platform-check'));
 
       $this->filePutContentsIfModified($vendorPath.'/autoload.php', $initial_autoload . "\r\n" . $autoload_real_contents);
 
@@ -286,8 +286,7 @@ return ComposerAutoloaderInit$suffix::getLoader();
 AUTOLOAD;
     }
 
-
-    protected function getAutoloadRealFile($useClassMap, $useIncludePath, $targetDirLoader, $useIncludeFiles, $vendorPathCode, $appBaseDirCode, $suffix, $useGlobalIncludePath, $prependAutoloader, $staticPhpVersion = 70000)
+    protected function getAutoloadRealFile($useClassMap, $useIncludePath, $targetDirLoader, $useIncludeFiles, $vendorPathCode, $appBaseDirCode, $suffix, $useGlobalIncludePath, $prependAutoloader, $staticPhpVersion = 70000, $checkPlatform = true)
     {
         $file = <<<HEADER
 
@@ -311,12 +310,24 @@ class ComposerAutoloaderInit$suffix
             return self::\$loader;
         }
 
+HEADER;
+
+        if ($checkPlatform && method_exists($this, 'getPlatformCheck')) {
+            $file .= <<<'PLATFORM_CHECK'
+
+        require __DIR__ . '/platform_check.php';
+
+
+PLATFORM_CHECK;
+        }
+
+        $file .= <<<CLASSLOADER_INIT
         spl_autoload_register(array('ComposerAutoloaderInit$suffix', 'loadClassLoader'), true, $prependAutoloader);
         self::\$loader = \$loader = new \\Composer\\Autoload\\ClassLoader();
         spl_autoload_unregister(array('ComposerAutoloaderInit$suffix', 'loadClassLoader'));
 
 
-HEADER;
+CLASSLOADER_INIT;
 
         if ($useIncludePath) {
             $file .= <<<'INCLUDE_PATH'
@@ -446,5 +457,46 @@ FOOTER;
         }
 
         return 0;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function safeCopy($source, $target)
+    {
+        if (!file_exists($target) || !file_exists($source) || !$this->filesAreEqual($source, $target)) {
+            $source = fopen($source, 'r');
+            $target = fopen($target, 'w+');
+
+            stream_copy_to_stream($source, $target);
+            fclose($source);
+            fclose($target);
+        }
+    }
+
+    // src/Composer/Util/Filesystem.php
+    private function filesAreEqual($a, $b)
+    {
+        // Check if filesize is different
+        if (filesize($a) !== filesize($b)) {
+            return false;
+        }
+
+        // Check if content is different
+        $ah = fopen($a, 'rb');
+        $bh = fopen($b, 'rb');
+
+        $result = true;
+        while (!feof($ah)) {
+            if (fread($ah, 8192) != fread($bh, 8192)) {
+                $result = false;
+                break;
+            }
+        }
+
+        fclose($ah);
+        fclose($bh);
+
+        return $result;
     }
 }
