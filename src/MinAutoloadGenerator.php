@@ -248,6 +248,13 @@ EOF;
 
       $this->filePutContentsIfModified($vendorPath.'/autoload.php', $initial_autoload . "\r\n" . $autoload_real_contents);
 
+      $checkPlatform = $config->get('platform-check');
+      if ($checkPlatform && method_exists($this, 'getPlatformCheck')) {
+          $this->filePutContentsIfModified($targetDir.'/platform_check.php', $this->getPlatformCheck($packageMap));
+      } elseif (file_exists($targetDir.'/platform_check.php')) {
+          unlink($targetDir.'/platform_check.php');
+      }
+
       $this->safeCopy(__DIR__.'/../vendor-verbatim/ClassLoader.php', $targetDir.'/ClassLoader.php');
       $this->safeCopy(__DIR__.'/../vendor-verbatim/LICENSE', $targetDir.'/LICENSE');
 
