@@ -244,16 +244,9 @@ EOF;
       $this->safeUnlink($targetDir.'/autoload_files.php');
 
       $initial_autoload = $this->getAutoloadFile($vendorPathToTargetDirCode, $suffix);
-      $autoload_real_contents = $this->getAutoloadRealFile(true, (bool) $includePathFileContents, $targetDirLoader, (bool) $includeFilesFileContents, $vendorPathCode, $appBaseDirCode, $suffix, $useGlobalIncludePath, $prependAutoloader, $staticPhpVersion, (bool) $config->get('platform-check'));
+      $autoload_real_contents = $this->getAutoloadRealFile(true, (bool) $includePathFileContents, $targetDirLoader, (bool) $includeFilesFileContents, $vendorPathCode, $appBaseDirCode, $suffix, $useGlobalIncludePath, $prependAutoloader, $staticPhpVersion, false);
 
       $this->filePutContentsIfModified($vendorPath.'/autoload.php', $initial_autoload . "\r\n" . $autoload_real_contents);
-
-      $checkPlatform = $config->get('platform-check');
-      if ($checkPlatform && method_exists($this, 'getPlatformCheck')) {
-          $this->filePutContentsIfModified($targetDir.'/platform_check.php', $this->getPlatformCheck($packageMap));
-      } elseif (file_exists($targetDir.'/platform_check.php')) {
-          unlink($targetDir.'/platform_check.php');
-      }
 
       $this->safeCopy(__DIR__.'/../vendor-verbatim/ClassLoader.php', $targetDir.'/ClassLoader.php');
       $this->safeCopy(__DIR__.'/../vendor-verbatim/LICENSE', $targetDir.'/LICENSE');
@@ -286,7 +279,7 @@ return ComposerAutoloaderInit$suffix::getLoader();
 AUTOLOAD;
     }
 
-    protected function getAutoloadRealFile($useClassMap, $useIncludePath, $targetDirLoader, $useIncludeFiles, $vendorPathCode, $appBaseDirCode, $suffix, $useGlobalIncludePath, $prependAutoloader, $staticPhpVersion = 70000, $checkPlatform = true)
+    protected function getAutoloadRealFile($useClassMap, $useIncludePath, $targetDirLoader, $useIncludeFiles, $vendorPathCode, $appBaseDirCode, $suffix, $useGlobalIncludePath, $prependAutoloader, $staticPhpVersion = 70000, $checkPlatform = false)
     {
         $file = <<<HEADER
 
@@ -311,15 +304,6 @@ class ComposerAutoloaderInit$suffix
         }
 
 HEADER;
-
-        if ($checkPlatform && method_exists($this, 'getPlatformCheck')) {
-            $file .= <<<'PLATFORM_CHECK'
-
-        require __DIR__ . '/platform_check.php';
-
-
-PLATFORM_CHECK;
-        }
 
         $file .= <<<CLASSLOADER_INIT
         spl_autoload_register(array('ComposerAutoloaderInit$suffix', 'loadClassLoader'), true, $prependAutoloader);
