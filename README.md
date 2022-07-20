@@ -78,7 +78,7 @@ Now we are talking!
   *A: Install plugin per-project*
 
 ```bash
-composer dump-min-autoload
+composer require ayesh/composer-min-autoload
 ```
 
 
