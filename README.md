@@ -98,5 +98,5 @@ You can also use `dma` as a short alias for `dump-min-autoload`.
 
 ### Getting original autoloader
 
-Every time you change packages (require/update/remove), Composer will generate the standard autoloader. You can run `composer dmo` to overwrite with your fancy minimal autoloader.
+Every time you change packages (require/update/remove), Composer will generate the standard autoloader. You can run `composer dma` to overwrite with your fancy minimal autoloader.
 
