@@ -33,7 +33,7 @@ EOT
     }
 
     /** @noinspection NullPointerExceptionInspection */
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output): int {
         $composer = $this->getComposer();
 
         $composer->setAutoloadGenerator(
